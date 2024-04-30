@@ -300,12 +300,13 @@ public class GameManager
 
         // 인덱스에 해당하는 동일 몬스터만 1~4마리 출현함
         // 인덱스의 범위를 지정하여 범위내에서 랜덤하게 부여되게
-        Public int idx => new Random().Next(0, 3);
+        
+        // 제대로 저장 되었는지 확인용 주석!!
         CreateMonster[0].ShowMonster(1); // 인덱스 값에 getrandomcount 의 return 값이 들어가게
 
         //1.위 또는 아래에 함수생성 int형 getrandomcount
         
-
+        
 
 
         Console.WriteLine("");
