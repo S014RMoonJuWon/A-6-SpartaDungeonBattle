@@ -8,6 +8,8 @@ public class GameManager
 
     private List<Item> storeInventory;
 
+    private List<Enemy> enemy;
+
 
     public GameManager()
     {
@@ -49,10 +51,11 @@ public class GameManager
         Console.WriteLine("1. 상태보기");
         Console.WriteLine("2. 인벤토리");
         Console.WriteLine("3. 상점");
+        Console.WriteLine("4. 전투시작");
         Console.WriteLine("");
 
         // 2. 선택한 결과를 검증함
-        int choice = ConsoleUtility.PromptMenuChoice(1, 3);
+        int choice = ConsoleUtility.PromptMenuChoice(1, 4);
 
         // 3. 선택한 결과에 따라 보내줌
         switch (choice)
@@ -65,6 +68,9 @@ public class GameManager
                 break;
             case 3:
                 StoreMenu();
+                break;
+            case 4:
+                BattleStartMenu();
                 break;
         }
         MainMenu();
@@ -201,7 +207,7 @@ public class GameManager
             // 1초간 메시지를 띄운 다음에 다시 진행
             Console.Clear();
             ConsoleUtility.ShowTitle(prompt);
-            Thread.Sleep(1000);
+            Thread.Sleep(1000); // 시간 줄여도 될 것 같음
         }
 
         Console.Clear();
@@ -249,6 +255,59 @@ public class GameManager
                 }
                 break;
         }
+    }
+
+    private void BattleStartMenu()
+    {
+        enemy = new List<Enemy>();
+        
+        Enemy minion = new Enemy("미니언", 2, 15, 5);
+        Enemy voiding = new Enemy("공허충", 3, 10, 9);
+        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8);
+
+        enemy.Add(minion);
+        enemy.Add(voiding);
+        enemy.Add(seigeMinion);
+        
+        Random random = new Random();
+        int enemycount = random.Next(1, 5);
+        
+        Console.Clear();
+
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
+        // 1~4 마리의 몬스터가 랜덤하게 등장, 표시되는 순서는 랜덤
+        for(int i = 0; i < enemycount; i++)
+        {
+            int randomEncount = random.Next(enemy.Count);
+            Enemy randomEnemy = enemy[randomEncount];
+            Console.WriteLine($"{i + 1} : {randomEnemy.Name} Hp {randomEnemy.Hp}") ;
+        }
+        
+        Console.WriteLine("");
+        Console.WriteLine("");
+        Console.WriteLine("[내정보]");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
+        Console.WriteLine("");
+        Console.WriteLine("1. 공격");
+        Console.WriteLine("2. 스킬");
+        Console.WriteLine("3. 아이템");
+
+        int KeyInput = ConsoleUtility.PromptMenuChoice(1, 3);
+        // swich 함수
+        switch (KeyInput)
+        {
+            case 1:
+                BattleMenu();
+                break;
+        }
+        // Attck, Skill 함수는 enemycount 수 까지 누를 수 있게
+
+    }
+    private void BattleMenu()
+    {
+        // 데미지 만큼 체력 감소
+        // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
     }
 }
 
