@@ -22,13 +22,12 @@ internal class Monster
         MonCall = !MonCall;
     }
 
+
     // 배틀 전과 배틀 시작 시 몬스터가 동일해야함
     public void ShowMonster(int idx)
     {
         Random random = new Random();
         int count = random.Next(1, 5); // 2. 두줄을 getrandomcount안에 넣기
-
-        //int idx = 0;
         
         for (int i = 0; i < count; i++)
         {
