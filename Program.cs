@@ -1,9 +1,6 @@
 ﻿
 
 
-
-using System.Security.Cryptography.X509Certificates;
-
 public class GameManager
 {
     private Player player;
@@ -11,7 +8,8 @@ public class GameManager
 
     private List<Item> storeInventory;
 
-    private List<Monster> CreateMonster;
+    private List<Enemy> enemy;
+
 
     public GameManager()
     {
@@ -20,7 +18,7 @@ public class GameManager
 
     private void InitializeGame()
     {
-        player = new Player("Jiwon", "Programmer", 1, 10, 5, 100, 15000);
+        //player = new Player("Jiwon", "Programmer", 1, 10, 5, 100, 15000);
 
         inventory = new List<Item>();
 
@@ -28,19 +26,33 @@ public class GameManager
         storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
         storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
         storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
-       
-        CreateMonster = new List<Monster>();
-        CreateMonster.Add(new Monster(2, "미니언", 15, 5));
-        CreateMonster.Add(new Monster(3, "공허충", 10, 9));
-        CreateMonster.Add(new Monster(5, "대포미니언", 25, 8));
     }
-
 
     public void StartGame()
     {
         Console.Clear();
         ConsoleUtility.PrintGameHeader();
+        CreatePlayerMenu();
+    }
+
+    private void CreatePlayerMenu()
+    {
+        Console.Clear();
+
+        Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
+        Console.WriteLine("원하시는 이름을 설정해주세요.");
+        Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Console.WriteLine("");
+
+        player = new Player();
+
         MainMenu();
+    }
+
+    private void JobChoice()
+    {
+
     }
 
     private void MainMenu()
@@ -59,7 +71,7 @@ public class GameManager
         Console.WriteLine("1. 상태보기");
         Console.WriteLine("2. 인벤토리");
         Console.WriteLine("3. 상점");
-        Console.WriteLine("4. 던전 입장");
+        Console.WriteLine("4. 전투시작");
         Console.WriteLine("");
 
         // 2. 선택한 결과를 검증함
@@ -78,7 +90,7 @@ public class GameManager
                 StoreMenu();
                 break;
             case 4:
-                DunjeonEntrance();
+                BattleStartMenu();
                 break;
         }
         MainMenu();
@@ -215,7 +227,7 @@ public class GameManager
             // 1초간 메시지를 띄운 다음에 다시 진행
             Console.Clear();
             ConsoleUtility.ShowTitle(prompt);
-            Thread.Sleep(1000);
+            Thread.Sleep(1000); // 시간 줄여도 될 것 같음
         }
 
         Console.Clear();
@@ -265,85 +277,58 @@ public class GameManager
         }
     }
 
-    private void DunjeonEntrance()
+    private void BattleStartMenu()
     {
+        enemy = new List<Enemy>();
+        
+        Enemy minion = new Enemy("미니언", 2, 15, 5);
+        Enemy voiding = new Enemy("공허충", 3, 10, 9);
+        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8);
+
+        enemy.Add(minion);
+        enemy.Add(voiding);
+        enemy.Add(seigeMinion);
+        
+        Random random = new Random();
+        int enemycount = random.Next(1, 5);
+        
         Console.Clear();
 
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
-        Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-        Console.WriteLine("이제 전투를 시작할 수 있습니다.");
-        Console.WriteLine("");
-
-        Console.WriteLine("1. 전투시작");  // 상태보기가 중복되어 우선은 제외. 추후 확인 필
-        Console.WriteLine("0. 나가기");
-        Console.WriteLine("");
-
-        switch (ConsoleUtility.PromptMenuChoice(0, 1))
+        // 1~4 마리의 몬스터가 랜덤하게 등장, 표시되는 순서는 랜덤
+        for(int i = 0; i < enemycount; i++)
         {
-            case 0:
-                MainMenu();
-                break;
-            case 1:
-                BettleField();
-                break;
-         }
-
-    }
-
-    private void BettleField()
-    {
-        Console.Clear();
-        Console.WriteLine("Battle!!");
-
+            int randomEncount = random.Next(enemy.Count);
+            Enemy randomEnemy = enemy[randomEncount];
+            Console.WriteLine($"{i + 1} : LV. {randomEnemy.Level} {randomEnemy.Name} Hp {randomEnemy.Hp}") ;
+        }
+        
         Console.WriteLine("");
-
-
-        // 인덱스에 해당하는 동일 몬스터만 1~4마리 출현함
-        // 인덱스의 범위를 지정하여 범위내에서 랜덤하게 부여되게
-        
-        // 제대로 저장 되었는지 확인용 주석!!
-        CreateMonster[0].ShowMonster(1); // 인덱스 값에 getrandomcount 의 return 값이 들어가게
-
-        //1.위 또는 아래에 함수생성 int형 getrandomcount
-        
-        
-
-
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
-        ConsoleUtility.PrintTextHighlights("Lv. ", player.Level.ToString("00"));
-        Console.WriteLine($"{player.Name} ( {player.Job} )");
-        Console.WriteLine("HP 100/100"); // 수기로 입력한 100은 Hp+bonusHp로 추후 수정해야 함
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
         Console.WriteLine("");
-
-        Console.WriteLine("0. 돌아가기"); // 구현 완료 시 삭제 예정
         Console.WriteLine("1. 공격");
-        Console.WriteLine("");
+        Console.WriteLine("2. 스킬");
+        Console.WriteLine("3. 아이템");
 
-        switch (ConsoleUtility.PromptMenuChoice(0,1)) // 구현 완료 후 (1,1)로 수정해야 함
+        int KeyInput = ConsoleUtility.PromptMenuChoice(1, 3);
+        // switch 함수
+        switch (KeyInput)
         {
-            case 0: // 구현 완료 시 삭제 예정
-                DunjeonEntrance();
-                break;
             case 1:
-                BettleStart();
+                BattleMenu();
                 break;
         }
-    }
+        // Attck, Skill 함수는 enemycount 수 까지 누를 수 있게
 
-    private void BettleStart()
+    }
+    private void BattleMenu()
     {
-        Console.Clear();
-        Console.WriteLine("Battle!!");
-
-        
-
-        Console.WriteLine("");
-        Console.WriteLine("생성 대기 중"); // 구현 완료 시 삭제 예정
-        Thread.Sleep(3000); // 구현 완료 시 삭제 예정
-
+        // 데미지 만큼 체력 감소
+        // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
     }
-
 }
 
 public class Program
