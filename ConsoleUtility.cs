@@ -77,5 +77,5 @@ internal class ConsoleUtility
         int currentLength = GetPrintableLength(str);
         int padding = totalLength - currentLength;
         return str.PadRight(str.Length + padding);
-    }
+    }       
 }
