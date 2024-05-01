@@ -10,6 +10,7 @@ public class GameManager
 
     private List<Enemy> enemy;
 
+    private List<Player> GetPlayer;
 
     public GameManager()
     {
@@ -18,7 +19,7 @@ public class GameManager
 
     private void InitializeGame()
     {
-        //player = new Player("Jiwon", "Programmer", 1, 10, 5, 100, 15000);
+        // player = new Player("Jiwon", "Programmer", 1, 10, 5, 100, 15000);
 
         inventory = new List<Item>();
 
@@ -26,6 +27,15 @@ public class GameManager
         storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
         storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
         storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
+        storeInventory.Add(new Item("공진단", "공진단", ItemType.Mediecine, 0, 0, 10, 3000));
+
+        GetPlayer = new List<Player>();
+        // 'name'에 할당될 부분은 작성해도 무관함(어차피 이름 입력받으면 값이 달라짐)
+        GetPlayer.Add(new Player("", "전사", 1, 10, 5, 100, 15000));
+        GetPlayer.Add(new Player("", "마법사", 1, 12, 3, 50, 20000));
+        GetPlayer.Add(new Player("", "궁수", 1, 7, 8, 80, 17000));
+        GetPlayer.Add(new Player("", "도적", 1, 9, 6, 80, 16000));
+
     }
 
     public void StartGame()
@@ -42,17 +52,64 @@ public class GameManager
         Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
         Console.WriteLine("원하시는 이름을 설정해주세요.");
+        Console.WriteLine("(설정된 이름은 변경이 어려우니 신중히 작성해주세요!)");
         Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
         Console.WriteLine("");
 
-        player = new Player();
+        string name = Console.ReadLine();
 
+        // 공란은
+        while (String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) 
+        {
+            Console.WriteLine("잘못된 입력입니다.");
+            Console.WriteLine("다시 입력해주세요.");
+            name = Console.ReadLine();
+        }
+
+        Console.WriteLine("");
+        Console.WriteLine($"{name}님, 환영합니다!");
+
+        Console.Clear();
+
+        Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Console.WriteLine("직업을 선택해주세요.");
+        Console.WriteLine("■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
+        Console.WriteLine("");
+
+        for (int i = 0; i < GetPlayer.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {GetPlayer[i].Job} (공격력 : {GetPlayer[i].Atk} | 방어력 : {GetPlayer[i].Def} | 체력 : {GetPlayer[i].Hp} | Gold :{GetPlayer[i].Gold} )");
+        }
+
+        Console.WriteLine("");
+
+        switch (ConsoleUtility.PromptMenuChoice(1, GetPlayer.Count))
+        {
+            case 1:
+                player = GetPlayer[0];
+                player.Name = name; // 입력받은 이름 할당
+                Console.WriteLine($"{GetPlayer[0].Job}를(을) 선택했습니다.");
+                break;
+            case 2:
+                player = GetPlayer[1];
+                player.Name = name;
+                Console.WriteLine($"{GetPlayer[1].Job}를(을) 선택했습니다.");
+                break;
+            case 3:
+                player = GetPlayer[2];
+                player.Name = name;
+                Console.WriteLine($"{GetPlayer[2].Job}를(을) 선택했습니다.");
+                break;
+            case 4:
+                player = GetPlayer[3];
+                player.Name = name;
+                Console.WriteLine($"{GetPlayer[3].Job}를(을) 선택했습니다.");
+                break;
+        }
+        Console.WriteLine("");
+
+        Thread.Sleep(2000); // 콘솔 클리어가 너무 빨라서 설정해둠
         MainMenu();
-    }
-
-    private void JobChoice()
-    {
-
     }
 
     private void MainMenu()
@@ -303,11 +360,15 @@ public class GameManager
             Enemy randomEnemy = enemy[randomEncount];
             Console.WriteLine($"{i + 1} : LV. {randomEnemy.Level} {randomEnemy.Name} Hp {randomEnemy.Hp}") ;
         }
-        
+
+        // 장비 착용 시 증가되는 Hp 표현
+        int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+
+
         Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp + bonusHp}/{player.Hp + bonusHp}");
         Console.WriteLine("");
         Console.WriteLine("1. 공격");
         Console.WriteLine("2. 스킬");
