@@ -58,8 +58,8 @@ public class GameManager
 
         string name = Console.ReadLine();
 
-        // 공란은
-        while (String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name)) 
+        // 스페이스바만 입력되거나 엔터만 누르면 메인메뉴로 넘어갈 수 없음
+        while (String.IsNullOrEmpty(name) || String.IsNullOrWhiteSpace(name))
         {
             Console.WriteLine("잘못된 입력입니다.");
             Console.WriteLine("다시 입력해주세요.");
