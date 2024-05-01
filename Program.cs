@@ -284,7 +284,7 @@ public class GameManager
         {
             int randomEncount = random.Next(enemy.Count);
             Enemy randomEnemy = enemy[randomEncount];
-            randomEnemies.Add(randomEnemy);
+            randomEnemies.Add(randomEnemy.Clone());
         }
 
         foreach (Enemy randomEnemy in randomEnemies)
@@ -334,14 +334,31 @@ public class GameManager
 
         int keyInput = ConsoleUtility.PromptMenuChoice(1, enemyCount);
 
-        if(keyInput <= enemyCount)
+        switch (keyInput)
         {
-            Attack(enemyCount);
+            case 1:
+                Attack(enemyCount, randomEnemies);
+                Console.WriteLine("1번 공격");
+                Console.ReadLine();
+                break;
+            case 2:
+                Console.WriteLine("2번 공격");
+                Console.ReadLine();
+                break;
+            case 3:
+                Console.WriteLine("3번 공격");
+                Console.ReadLine();
+                break;
+            case 4:
+                Console.WriteLine("4번 공격");
+                Console.ReadLine();
+                break;
         }
-        // 데미지 만큼 체력 감소
-        // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
     }
-    void Attack(int enemyCount)
+    
+    // 데미지 만큼 체력 감소
+    // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
+    void Attack(int enemyCount, List<Enemy> randomEnemies)
     {
         Random random = new Random();
         int minDamage = (int)Math.Ceiling(player.Atk * 0.9f);
@@ -350,15 +367,15 @@ public class GameManager
 
         for (int i = 0; i < enemyCount; i++)
         {
-            if (enemy[i].Hp - damage <= 0)
+            if (randomEnemies[i].Hp - damage <= 0)
             {
                 Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine($"{i + 1} Lv{enemy[i].Level} {enemy[i].Name} Hp Dead");
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
                 Console.ResetColor();
             }
             else
             {
-                Console.WriteLine($"{i + 1} Lv{enemy[i].Level} {enemy[i].Name} Hp {enemy[i].Hp}");
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
             }
         }
     }
