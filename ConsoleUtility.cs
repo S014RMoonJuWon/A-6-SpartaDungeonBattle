@@ -28,7 +28,7 @@ internal class ConsoleUtility
         while (true)
         {
             Console.Write("원하시는 번호를 입력해주세요: ");
-            if(int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
+            if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
             {
                 return choice;
             }
@@ -77,5 +77,5 @@ internal class ConsoleUtility
         int currentLength = GetPrintableLength(str);
         int padding = totalLength - currentLength;
         return str.PadRight(str.Length + padding);
-    }       
+    }
 }
