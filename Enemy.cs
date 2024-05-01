@@ -1,4 +1,6 @@
-﻿internal class Enemy
+﻿using System;
+
+internal class Enemy
 {
     public string Name { get; }
     public int Level { get; }
@@ -15,8 +17,21 @@
         IsDead = isDead;
     }
 
+    internal void PrintEnemyStatDescription(bool withNumber = false, int idx = 0)
+    {
+
+    }
+
     internal void Died()
     {
+        string alive = $"Hp {Hp}";
         IsDead = true;
+        alive.Replace ($"Hp {Hp}","Dead");
+    }
+
+    public Enemy Clone()
+    {
+        var clone = new Enemy("", 0, 0, 0, false);
+        return clone;
     }
 }

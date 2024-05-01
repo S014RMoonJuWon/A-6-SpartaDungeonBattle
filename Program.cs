@@ -1,6 +1,8 @@
 ﻿
 
 
+using System;
+
 public class GameManager
 {
     private Player player;
@@ -26,6 +28,16 @@ public class GameManager
         storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
         storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
         storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
+
+        enemy = new List<Enemy>();
+
+        Enemy minion = new Enemy("미니언", 2, 1, 5);
+        Enemy voiding = new Enemy("공허충", 3, 10, 9);
+        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8);
+
+        enemy.Add(minion);
+        enemy.Add(voiding);
+        enemy.Add(seigeMinion);
     }
 
     public void StartGame()
@@ -259,55 +271,96 @@ public class GameManager
 
     private void BattleStartMenu()
     {
-        enemy = new List<Enemy>();
-        
-        Enemy minion = new Enemy("미니언", 2, 15, 5);
-        Enemy voiding = new Enemy("공허충", 3, 10, 9);
-        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8);
-
-        enemy.Add(minion);
-        enemy.Add(voiding);
-        enemy.Add(seigeMinion);
-        
+        List<Enemy> randomEnemies = new List<Enemy>();
         Random random = new Random();
-        int enemycount = random.Next(1, 5);
+        int enemyCount = random.Next(1, 5);
         
         Console.Clear();
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
         // 1~4 마리의 몬스터가 랜덤하게 등장, 표시되는 순서는 랜덤
-        for(int i = 0; i < enemycount; i++)
+        for(int i = 0; i < enemyCount; i++)
         {
             int randomEncount = random.Next(enemy.Count);
             Enemy randomEnemy = enemy[randomEncount];
-            Console.WriteLine($"{i + 1} : {randomEnemy.Name} Hp {randomEnemy.Hp}") ;
+            randomEnemies.Add(randomEnemy);
         }
-        
+
+        foreach (Enemy randomEnemy in randomEnemies)
+        {
+            Console.WriteLine($"Lv{randomEnemy.Level} {randomEnemy.Name} Hp {randomEnemy.Hp}");
+        }
+
         Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
         Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
         Console.WriteLine("");
-        Console.WriteLine("1. 공격");
-        Console.WriteLine("2. 스킬");
-        Console.WriteLine("3. 아이템");
+        Console.WriteLine("1. 공격\n2. 스킬\n3. 아이템");
+        Console.WriteLine("");
 
-        int KeyInput = ConsoleUtility.PromptMenuChoice(1, 3);
-        // swich 함수
-        switch (KeyInput)
+        int keyInput = ConsoleUtility.PromptMenuChoice(1, 3);
+        switch (keyInput)
         {
+            // 1. 전투
             case 1:
-                BattleMenu();
+                BattleMenu(enemyCount, randomEnemies);
                 break;
         }
-        // Attck, Skill 함수는 enemycount 수 까지 누를 수 있게
-
+        // Attck, Skill 함수는 enemyCount 수 까지 누를 수 있게
     }
-    private void BattleMenu()
+    void BattleMenu(int enemyCount, List<Enemy> randomEnemies)
     {
+        int index = 1;
+
+        Console.Clear();
+
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
+
+        foreach (Enemy randomEnemy in randomEnemies)
+        {
+            Console.WriteLine($"{index} Lv{randomEnemy.Level} {randomEnemy.Name} Hp {randomEnemy.Hp}");
+            index++;
+        }
+
+        Console.WriteLine("");
+        Console.WriteLine("");
+        Console.WriteLine("[내정보]");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
+        Console.WriteLine("");
+        Console.WriteLine("공격할 대상을 고르세요.");
+
+        int keyInput = ConsoleUtility.PromptMenuChoice(1, enemyCount);
+
+        if(keyInput <= enemyCount)
+        {
+            Attack(enemyCount);
+        }
         // 데미지 만큼 체력 감소
         // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
+    }
+    void Attack(int enemyCount)
+    {
+        Random random = new Random();
+        int minDamage = (int)Math.Ceiling(player.Atk * 0.9f);
+        int maxDamage = (int)Math.Ceiling(player.Atk * 1.1f);
+        int damage = random.Next(minDamage, maxDamage + 1);
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (enemy[i].Hp - damage <= 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine($"{i + 1} Lv{enemy[i].Level} {enemy[i].Name} Hp Dead");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.WriteLine($"{i + 1} Lv{enemy[i].Level} {enemy[i].Name} Hp {enemy[i].Hp}");
+            }
+        }
     }
 }
 
