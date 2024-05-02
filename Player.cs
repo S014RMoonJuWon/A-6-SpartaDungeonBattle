@@ -79,7 +79,7 @@ internal class Player
 
         Console.WriteLine($"{player.Name}의 공격!");
         Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}을(를) 맞췄습니다. [데미지 : {damage}]\n");
-        if (randomEnemies[keyInput - 1].Hp > 0)
+        if (randomEnemies[keyInput - 1].NowHp > 0)
         {
             Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput -1].NowHp}");
         }
