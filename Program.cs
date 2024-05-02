@@ -357,16 +357,6 @@ public class GameManager
         Random random = new Random();
         int enemyCount = random.Next(1, 5);
 
-        //아래 내용 확인 필요_해당내용 위로 올라감!!_다빈        
-        // 우선 주원님 자료에서는 삭제됨
-
-        // enemy = new List<Enemy>();  
-        //Enemy minion = new Enemy("미니언", 2, 15, 5, 2); 
-        //Enemy voiding = new Enemy("공허충", 3, 10, 9, 3); 
-        //Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8, 5);
-        //enemy.Add(minion);
-        //enemy.Add(voiding);
-        //enemy.Add(seigeMinion);
 
         Console.Clear();
 
@@ -379,8 +369,6 @@ public class GameManager
             Enemy randomEnemy = enemy[randomEncount];
             randomEnemies.Add(randomEnemy.Clone());
 
-            //확인필요! (주원님 자료에는 없음/재원님, 유창님 자료에는 있음)
-            Console.WriteLine($"{i + 1} : {randomEnemy.Name} Hp {randomEnemy.Hp}");
         }
 
         foreach (Enemy randomEnemy in randomEnemies) //주원님 설정
@@ -487,148 +475,95 @@ public class GameManager
 
 
         // !!여기부터 다시 봐야 함!!
-        // 최초 여기부터 BattleMenu의 시작이었음
-        // 주원님, 유창님 자료에는 여기부터 없음
-        // 재원님 자료에는 여기부터 있음
-        if (enemy.Count == 0 || player.IsDead)
-        {
-            MainMenu();
-            return;
-        }
-
-        int selectedEnemyIndex = SelectEnemy(enemy);
-        Enemy selectedEnemy = enemy[selectedEnemyIndex];
-        player.Attack(selectedEnemy);
-
-        if (selectedEnemy.IsDead)
-        {
-            Console.WriteLine($"{selectedEnemy.Name}이(가) 죽었습니다!");
-            enemy.RemoveAt(selectedEnemyIndex);
-        }
-        else
-        {
-            int enemyDamage = selectedEnemy.Atk;
-            player.TakeDamage(enemyDamage);
-
-            Console.WriteLine($"{selectedEnemy.Name}이(가) {player.Name}에게 {enemyDamage}의 피해를 입혔습니다.");
-
-            if (player.IsDead)
-            {
-                Console.WriteLine($"{player.Name}이(가) 사망했습니다.");
-                // 게임 오버 또는 다른 처리를 추가할 수 있습니다.
-                return;
-            }
-        }
-
-        // 플레이어와 몬스터가 번갈아가며 공격하는 과정을 반복합니다.
-        BattleMenu();
 
 
         // 주원님, 유창님 자료에는 여기까지 없음
         // 재원님 자료에는 여기까지 있음
 
         // 유창님 자료에는 여기부터 Bettle Menu가 시작임
-        bool playerTurn = true; // 플레이어의 차례인지 여부를 나타내는 변수
+        //bool playerTurn = true; // 플레이어의 차례인지 여부를 나타내는 변수
 
-        foreach (Enemy enemy in enemy)
-        {
-            while (!enemy.IsDead && player.Hp > 0)
-            {
-                Console.Clear();
-                if (playerTurn)
-                {
-                    ConsoleUtility.ShowTitle($"{player.Name} 의 공격!");
-                }
-                else
-                {
-                    ConsoleUtility.ShowTitle($"{enemy.Name} 의 공격!");
-                }
-                Console.WriteLine("");
-                Console.WriteLine($"[적 정보]");
-                Console.WriteLine($"이름: {enemy.Name} | 체력: {enemy.Hp}/{enemy.Hp}");
-                Console.WriteLine("");
-                Console.WriteLine("[플레이어 정보]");
-                Console.WriteLine($"레벨: {player.Level.ToString("00")} | 이름: {player.Name} | 직업: {player.Job} | 체력: {player.Hp}/100");
-                Console.WriteLine("");
-                Console.WriteLine("1. 공격");
-                Console.WriteLine("2. 스킬");
-                Console.WriteLine("3. 아이템");
-                Console.WriteLine("");
+        //foreach (Enemy enemy in enemy)
+        //{
+        //    while (!enemy.IsDead && player.Hp > 0)
+        //    {
+        //        Console.Clear();
+        //        if (playerTurn)
+        //        {
+        //            ConsoleUtility.ShowTitle($"{player.Name} 의 공격!");
+        //        }
+        //        else
+        //        {
+        //            ConsoleUtility.ShowTitle($"{enemy.Name} 의 공격!");
+        //        }
+        //        Console.WriteLine("");
+        //        Console.WriteLine($"[적 정보]");
+        //        Console.WriteLine($"이름: {enemy.Name} | 체력: {enemy.Hp}/{enemy.Hp}");
+        //        Console.WriteLine("");
+        //        Console.WriteLine("[플레이어 정보]");
+        //        Console.WriteLine($"레벨: {player.Level.ToString("00")} | 이름: {player.Name} | 직업: {player.Job} | 체력: {player.Hp}/100");
+        //        Console.WriteLine("");
+        //        Console.WriteLine("1. 공격");
+        //        Console.WriteLine("2. 스킬");
+        //        Console.WriteLine("3. 아이템");
+        //        Console.WriteLine("");
 
-                int choice = ConsoleUtility.PromptMenuChoice(1, 3);
+        //        int choice = ConsoleUtility.PromptMenuChoice(1, 3);
 
-                switch (choice)
-                {
-                    case 1:
-                        if (playerTurn)
-                        {
-                            // 플레이어가 적을 공격함
-                            player.Attack(enemy);
-                            Console.WriteLine($"{player.Name}이(가) {enemy.Name}에게 {player.Atk}의 피해를 입혔습니다!");
-                            if (enemy.IsDead)
-                            {
-                                Console.WriteLine($"{enemy.Name}을(를) 처치했습니다!");
-                                Console.WriteLine("계속하려면 아무 키나 누르세요...");
-                                Console.ReadKey();
-                                break;
-                            }
-                            else
-                            {
-                                // 적의 공격 구현
-                                enemy.Attack(player);
-                                Console.WriteLine($"{enemy.Name}의 공격!");
-                                Console.WriteLine($"{enemy.Name}이(가) {player.Name}에게 {enemy.Atk}의 피해를 입혔습니다!");
-                                Console.WriteLine($"{player.Name}의 체력: {player.Hp}");
-                                Console.WriteLine("계속하려면 아무 키나 누르세요...");
-                                Console.ReadKey();
-                            }
-                            playerTurn = false; // 플레이어의 공격이 끝났으므로 적의 차례로 변경
-                        }
-                        else
-                        {
-                            // 적이 플레이어를 공격함
-                            enemy.Attack(player);
-                            Console.WriteLine($"{enemy.Name}이(가) {player.Name}에게 {enemy.Atk}의 피해를 입혔습니다!");
-                            if (player.Hp <= 0)
-                            {
-                                Console.WriteLine($"{enemy.Name}에게 패배했습니다!");
-                                Console.WriteLine("게임 오버.");
-                                Console.ReadKey();
-                                Environment.Exit(0);
-                            }
-                            playerTurn = true; // 적의 공격이 끝났으므로 플레이어의 차례로 변경
-                        }
-                        break;
-                    case 2:
-                        // 스킬 기능 구현
-                        break;
-                    case 3:
-                        // 아이템 기능 구현
-                        break;
-                }
-            }
-        }
+        //        switch (choice)
+        //        {
+        //            case 1:
+        //                if (playerTurn)
+        //                {
+        //                    // 플레이어가 적을 공격함
+        //                    player.Attack(enemy);
+        //                    Console.WriteLine($"{player.Name}이(가) {enemy.Name}에게 {player.Atk}의 피해를 입혔습니다!");
+        //                    if (enemy.IsDead)
+        //                    {
+        //                        Console.WriteLine($"{enemy.Name}을(를) 처치했습니다!");
+        //                        Console.WriteLine("계속하려면 아무 키나 누르세요...");
+        //                        Console.ReadKey();
+        //                        break;
+        //                    }
+        //                    else
+        //                    {
+        //                        // 적의 공격 구현
+        //                        enemy.Attack(player);
+        //                        Console.WriteLine($"{enemy.Name}의 공격!");
+        //                        Console.WriteLine($"{enemy.Name}이(가) {player.Name}에게 {enemy.Atk}의 피해를 입혔습니다!");
+        //                        Console.WriteLine($"{player.Name}의 체력: {player.Hp}");
+        //                        Console.WriteLine("계속하려면 아무 키나 누르세요...");
+        //                        Console.ReadKey();
+        //                    }
+        //                    playerTurn = false; // 플레이어의 공격이 끝났으므로 적의 차례로 변경
+        //                }
+        //                else
+        //                {
+        //                    // 적이 플레이어를 공격함
+        //                    enemy.Attack(player);
+        //                    Console.WriteLine($"{enemy.Name}이(가) {player.Name}에게 {enemy.Atk}의 피해를 입혔습니다!");
+        //                    if (player.Hp <= 0)
+        //                    {
+        //                        Console.WriteLine($"{enemy.Name}에게 패배했습니다!");
+        //                        Console.WriteLine("게임 오버.");
+        //                        Console.ReadKey();
+        //                        Environment.Exit(0);
+        //                    }
+        //                    playerTurn = true; // 적의 공격이 끝났으므로 플레이어의 차례로 변경
+        //                }
+        //                break;
+        //            case 2:
+        //                // 스킬 기능 구현
+        //                break;
+        //            case 3:
+        //                // 아이템 기능 구현
+        //                break;
+        //        }
+        //    }
+        //}
     }
 
 
-    private int SelectEnemy(List<Enemy> enemies) // 재원님이 작성한 내용
-    {
-        Console.WriteLine("공격할 몬스터를 선택하세요:");
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            Console.WriteLine($"{i + 1}: {enemies[i].Name} (HP: {enemies[i].Hp})");
-        }
-
-        int selectedEnemyIndex = ConsoleUtility.PromptMenuChoice(1, enemies.Count) - 1;
-
-        return selectedEnemyIndex;
-    }
-
-    private int CalculatePlayerDamage()
-    {
-        // 플레이어 공격력 계산 로직 추가
-        return 10; // 임시로 10을 반환
-    }
 }
 
 public class Program

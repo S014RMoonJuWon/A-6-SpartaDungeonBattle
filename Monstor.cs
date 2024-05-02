@@ -16,15 +16,6 @@ namespace SpartaDungeon  // 해당 cs파일 재원님이 추가 설정
             CurrentHP = maxHP;
         }
 
-        public void TakeDamage(int damage) // 재원님 확인 필요함_Enemy.cs에 동일한 내용이 있음
-        {
-            CurrentHP -= damage;
-            if (CurrentHP <= 0)
-            {
-                CurrentHP = 0;
-                Console.WriteLine($"{Name}이(가) 죽었습니다!");
-            }
-        }
     }
 
     class Game
