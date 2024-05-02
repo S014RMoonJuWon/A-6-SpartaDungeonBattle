@@ -1,6 +1,4 @@
-﻿using System;
-
-internal class Enemy
+﻿internal class Enemy
 {
     public string Name { get; }
     public int Level { get; private set; }
@@ -18,14 +16,19 @@ internal class Enemy
         Exp = exp;
         IsDead = isDead;
     }
-
-    internal void PrintEnemyStatDescription(bool withNumber = false, int idx = 0)
+    public void TakeDamage(int damage)
     {
-
+        Hp -= damage;
+        if (Hp <= 0)
+        {
+            Hp = 0;
+            IsDead = true;
+            Console.WriteLine($"{Name}이(가) 죽었습니다!");
+        }
     }
-
-    internal void Died()
+    public int GiveExperience()
     {
+<<<<<<< Updated upstream
         string alive = $"Hp {Hp}";
         IsDead = true;
         alive.Replace($"Hp {Hp}", "Dead");
@@ -37,3 +40,9 @@ internal class Enemy
         return clone;
     }
 }
+=======
+        // 죽은 몬스터가 주는 경험치를 반환
+        return Exp;
+    }
+}
+>>>>>>> Stashed changes

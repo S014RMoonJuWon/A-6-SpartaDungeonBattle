@@ -1,5 +1,4 @@
-﻿
-internal class ConsoleUtility
+﻿internal class ConsoleUtility
 {
     public static void PrintGameHeader()
     {
@@ -28,14 +27,17 @@ internal class ConsoleUtility
         while (true)
         {
             Console.Write("원하시는 번호를 입력해주세요: ");
+<<<<<<< Updated upstream
             if (int.TryParse(Console.ReadLine(), out int choice) && choice >= min && choice <= max)
+=======
+            if (int.TryParse(Console.ReadLine(), out int cholce) && cholce >= min && cholce <= max)
+>>>>>>> Stashed changes
             {
-                return choice;
+                return cholce;
             }
-            Console.WriteLine("잘못된 입력입니다. 다시 시도해주세요.");
+            Console.WriteLine("잘못된 입력입니다.");
         }
     }
-
     internal static void ShowTitle(string title)
     {
         Console.ForegroundColor = ConsoleColor.Magenta;
@@ -72,8 +74,6 @@ internal class ConsoleUtility
 
     public static string PadRightForMixedText(string str, int totalLength)
     {
-        // 가나다
-        // 111111
         int currentLength = GetPrintableLength(str);
         int padding = totalLength - currentLength;
         return str.PadRight(str.Length + padding);

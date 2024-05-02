@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 ﻿using SpartaDungeon;
+=======
+﻿
+using SpartaDungeon;
+>>>>>>> Stashed changes
 using System;
 
 public class GameManager
