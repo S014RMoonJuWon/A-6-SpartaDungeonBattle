@@ -37,7 +37,9 @@ internal class Player
 
         Console.WriteLine($"{player.Name}의 공격!");
         Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}을(를) 맞췄습니다. [데미지 : {damage}]\n");
-        if (randomEnemies[keyInput - 1].Hp > 0)
+        
+        // while 추가해야함 enemy 체력이 모두 0미만 일때
+        if (randomEnemies[keyInput - 1].NowHp > 0)
         {
             Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput -1].NowHp}");
         }
@@ -59,7 +61,7 @@ internal class Player
         // 공격 후 콘솔 창
         for (int i = 0; i < enemyCount; i++)
         {
-            if (randomEnemies[i].Hp > 0)
+            if (randomEnemies[i].NowHp > 0)
             {
                 Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
             }
