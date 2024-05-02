@@ -101,7 +101,7 @@ internal class Player
         // 공격 후 콘솔 창
         for (int i = 0; i < enemyCount; i++)
         {
-            if (randomEnemies[i].Hp > 0)
+            if (randomEnemies[i].NowHp > 0)
             {
                 Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
             }

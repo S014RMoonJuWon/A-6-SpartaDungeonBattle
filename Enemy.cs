@@ -38,13 +38,7 @@ internal class Enemy
 
     public Enemy Clone()
     {
-        var clone = new Enemy(Name, Level, Hp, Atk, Exp);
-        return clone;
-    }
-
-    public Enemy Clone()
-    {
-        var clone = new Enemy(Name, Level, Hp, NowHp , Atk);
+        var clone = new Enemy(Name, Level, Hp, NowHp , Atk, Exp);
         return clone;
     }
 }

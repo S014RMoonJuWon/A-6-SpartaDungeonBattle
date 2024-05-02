@@ -1,8 +1,4 @@
 
-using SpartaDungeon;
-
-using System;
-
 public class GameManager
 {
     private Player player;
@@ -11,11 +7,8 @@ public class GameManager
     private List<Item> storeInventory;
 
     private List<Enemy> enemy;
-    private Game game;
 
     private List<Player> GetPlayer; // 다빈_직업 선택 및 추가 작업
-
-    private List<Player> GetPlayer;
 
 
     public GameManager()
@@ -45,9 +38,9 @@ public class GameManager
 
         // 적 초기화
         enemy = new List<Enemy>();
-        Enemy minion = new Enemy("미니언", 2, 15, 5, 2); // 경험치추가 및 다른 스탯 변경되었는지 확인 필요_주원님 작성은 아님
-        Enemy voiding = new Enemy("공허충", 3, 10, 9, 3);
-        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8, 5);
+        Enemy minion = new Enemy("미니언", 2, 15,15, 5, 2); // 경험치추가 및 다른 스탯 변경되었는지 확인 필요_주원님 작성은 아님
+        Enemy voiding = new Enemy("공허충", 3, 10,10, 9, 3);
+        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 25, 8, 5);
         enemy.Add(minion);
         enemy.Add(voiding);
         enemy.Add(seigeMinion);
