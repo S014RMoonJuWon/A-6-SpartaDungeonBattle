@@ -12,6 +12,8 @@ public class GameManager
 
     private List<Enemy> enemy;
 
+    private List<Player> GetPlayer;
+
 
     public GameManager()
     {
@@ -31,9 +33,9 @@ public class GameManager
 
         enemy = new List<Enemy>();
 
-        Enemy minion = new Enemy("미니언", 2, 1, 5);
-        Enemy voiding = new Enemy("공허충", 3, 10, 9);
-        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 8);
+        Enemy minion = new Enemy("미니언", 2, 15, 15, 5);
+        Enemy voiding = new Enemy("공허충", 3, 10, 10, 9);
+        Enemy seigeMinion = new Enemy("대포미니언", 5, 25, 25, 8);
 
         enemy.Add(minion);
         enemy.Add(voiding);
@@ -287,10 +289,11 @@ public class GameManager
             randomEnemies.Add(randomEnemy.Clone());
         }
 
-        foreach (Enemy randomEnemy in randomEnemies)
+        for (int i = 0; i < enemyCount; i++) 
         {
-            Console.WriteLine($"Lv{randomEnemy.Level} {randomEnemy.Name} Hp {randomEnemy.Hp}");
+            Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
         }
+
 
         Console.WriteLine("");
         Console.WriteLine("");
@@ -310,19 +313,17 @@ public class GameManager
         }
         // Attck, Skill 함수는 enemyCount 수 까지 누를 수 있게
     }
+    // 클론된 randomEnemies 중 공격 대상을 고르는 메뉴
     void BattleMenu(int enemyCount, List<Enemy> randomEnemies)
     {
-        int index = 1;
-
         Console.Clear();
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
 
-        foreach (Enemy randomEnemy in randomEnemies)
+        for (int i = 0; i < enemyCount; i++)
         {
-            Console.WriteLine($"{index} Lv{randomEnemy.Level} {randomEnemy.Name} Hp {randomEnemy.Hp}");
-            index++;
+            Console.WriteLine($"{i+1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
         }
 
         Console.WriteLine("");
@@ -336,48 +337,41 @@ public class GameManager
 
         switch (keyInput)
         {
-            case 1:
-                Attack(enemyCount, randomEnemies);
-                Console.WriteLine("1번 공격");
-                Console.ReadLine();
-                break;
-            case 2:
-                Console.WriteLine("2번 공격");
-                Console.ReadLine();
-                break;
-            case 3:
-                Console.WriteLine("3번 공격");
-                Console.ReadLine();
-                break;
-            case 4:
-                Console.WriteLine("4번 공격");
-                Console.ReadLine();
+            default:
+                Console.Clear();
+                Player.Attack(enemyCount, randomEnemies, keyInput, player);
+                enemyAttack(enemyCount, randomEnemies);
                 break;
         }
     }
-    
-    // 데미지 만큼 체력 감소
-    // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
-    void Attack(int enemyCount, List<Enemy> randomEnemies)
+
+    void enemyAttack(int enemyCount, List<Enemy> randomEnemies)
     {
-        Random random = new Random();
-        int minDamage = (int)Math.Ceiling(player.Atk * 0.9f);
-        int maxDamage = (int)Math.Ceiling(player.Atk * 1.1f);
-        int damage = random.Next(minDamage, maxDamage + 1);
+        Console.Clear();
+
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
 
         for (int i = 0; i < enemyCount; i++)
         {
-            if (randomEnemies[i].Hp - damage <= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Black;
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
-                Console.ResetColor();
-            }
-            else
+            if (randomEnemies[i].Hp > 0)
             {
                 Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
             }
+            else
+            {
+                randomEnemies[i].Died();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
+                Console.ResetColor();
+            }
         }
+        
+        Console.WriteLine("\n");
+        Console.WriteLine("[내정보]");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
+        Console.WriteLine("");
+        Console.WriteLine("공격할 대상을 고르세요.");
     }
 }
 
