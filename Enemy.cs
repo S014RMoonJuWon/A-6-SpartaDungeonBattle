@@ -81,7 +81,14 @@ internal class Enemy
 
         Console.WriteLine($"총 {sumAtk} 데미지!\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp - sumAtk}/{player.Hp}");
+        if(player.NowHp >0)
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp}/{player.Hp}");
+        }
+        else
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp 0/{player.Hp}");
+        }
         Console.WriteLine("");
         Console.WriteLine("0. 다음\n");
 

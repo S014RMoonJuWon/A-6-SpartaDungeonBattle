@@ -388,7 +388,15 @@ public class GameManager
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
         // 다빈_장비착용 시 보너스 AP 표기되는 것 추가함
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp + bonusHp}/{player.Hp + bonusHp}");
+        if (player.NowHp + bonusHp > 0)
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp + bonusHp}/{player.Hp + bonusHp}");
+        }
+        else
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp 0/{player.Hp + bonusHp}");
+
+        }
         Console.WriteLine("");
         Console.WriteLine("1. 공격\n2. 스킬\n3. 아이템\n4. 전투결과");
         Console.WriteLine("");
@@ -475,8 +483,10 @@ public class GameManager
             return;
         }
         // 플레이어가 죽은 경우
-        else if (player.Hp <= 0)
+        else if (player.NowHp <= 0)
         {
+            Console.Clear();
+
             Console.WriteLine("전투에서 패배하였습니다...");
             Console.WriteLine("게임오버");
             // 플레이어의 체력을 표시합니다.
