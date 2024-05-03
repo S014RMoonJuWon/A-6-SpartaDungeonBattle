@@ -388,7 +388,7 @@ public class GameManager
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
         // 다빈_장비착용 시 보너스 AP 표기되는 것 추가함
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp + bonusHp}/{player.Hp + bonusHp}");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp + bonusHp}/{player.Hp + bonusHp}");
         Console.WriteLine("");
         Console.WriteLine("1. 공격\n2. 스킬\n3. 아이템");
         Console.WriteLine("");
@@ -431,7 +431,7 @@ public class GameManager
         Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp + bonusHp}/{player.Hp + bonusHp}");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp + bonusHp}/{player.Hp + bonusHp}");
         Console.WriteLine("");
         Console.WriteLine("공격할 대상을 고르세요.");
 
