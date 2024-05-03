@@ -1,4 +1,7 @@
 
+using System;
+using System.Reflection;
+
 public class GameManager
 {
     private Player player;
@@ -437,10 +440,11 @@ public class GameManager
             default:
                 Console.Clear();
                 Player.Attack(enemyCount, randomEnemies, keyInput, player);
-                Enemy.Attack(enemyCount, randomEnemies, player);
-                BattleMenu(enemyCount, randomEnemies);
+                enemyAttack(enemyCount, randomEnemies);
+                Battle(0, enemyCount, randomEnemies);//
                 break;
         }
+
     }
 
     // 데미지 만큼 체력 감소
