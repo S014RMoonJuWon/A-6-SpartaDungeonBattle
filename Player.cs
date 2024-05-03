@@ -72,7 +72,7 @@ internal class Player
         int maxDamage = (int)Math.Ceiling(player.Atk * 1.1f);
         int damage = random.Next(minDamage, maxDamage + 1);
 
-        randomEnemies[keyInput -1].NowHp = randomEnemies[keyInput - 1].Hp - damage;
+        randomEnemies[keyInput -1].NowHp -= damage;
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
@@ -80,15 +80,19 @@ internal class Player
         Console.WriteLine($"{player.Name}의 공격!");
         Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
-        if (randomEnemies[keyInput - 1].NowHp > 0)
-        {
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput -1].NowHp}");
+        if (randomEnemies[keyInput - 1].NowHp <= 0)
+        { 
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> Dead");
         }
-        else
+        else if(randomEnemies[keyInput - 1].NowHp >0 && randomEnemies[keyInput - 1].NowHp < randomEnemies[keyInput - 1].Hp)
         {
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> Dead");
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput - 1].NowHp}");
         }
-        
+        else 
+        {            
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> {randomEnemies[keyInput - 1].NowHp}");
+        }
+
         Console.WriteLine("\n0. 다음\n");
         
         switch (ConsoleUtility.PromptMenuChoice(0, 0))
@@ -103,7 +107,7 @@ internal class Player
         for (int i = 0; i < enemyCount; i++)
         {
             if (randomEnemies[i].NowHp > 0)
-            {
+            {   
                 Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
             }
             else
