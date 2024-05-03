@@ -10,9 +10,11 @@ internal class Player
     public int Exp { get; set; } // 재원님 추가 설정
 
     public int Hp { get; set; } // 유창님 set 설정
+    public int NowHp { get; set; } // 다빈 설정
+
     public int Gold { get; set; }
 
-    public Player(string name, string job, int level, float atk, int def, int hp, int gold)
+    public Player(string name, string job, int level, float atk, int def, int hp, int nowHp, int gold)
     {
         Name = name;
         Job = job;
@@ -20,6 +22,7 @@ internal class Player
         Atk = atk;
         Def = def;
         Hp = hp;
+        NowHp = nowHp;
         Gold = gold;
     }
 
@@ -72,7 +75,7 @@ internal class Player
         int maxDamage = (int)Math.Ceiling(player.Atk * 1.1f);
         int damage = random.Next(minDamage, maxDamage + 1);
 
-        randomEnemies[keyInput -1].NowHp = randomEnemies[keyInput - 1].Hp - damage;
+        randomEnemies[keyInput -1].NowHp -= damage;
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
@@ -80,18 +83,21 @@ internal class Player
         Console.WriteLine($"{player.Name}의 공격!");
         Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
-        // while 추가해야함 enemy 체력이 모두 0미만 일때
-        if (randomEnemies[keyInput - 1].NowHp > 0)
-        {
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput -1].NowHp}");
+
+        if (randomEnemies[keyInput - 1].NowHp <= 0)
+        { 
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> Dead");
         }
-        else
+        else if(randomEnemies[keyInput - 1].NowHp >0 && randomEnemies[keyInput - 1].NowHp < randomEnemies[keyInput - 1].Hp)
         {
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> Dead\n");
-            randomEnemies[keyInput - 1].Died();
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput - 1].NowHp}");
         }
-        
-        Console.WriteLine("0. 다음\n");
+        else 
+        {            
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> {randomEnemies[keyInput - 1].NowHp}");
+        }
+
+        Console.WriteLine("\n0. 다음\n");
         
         switch (ConsoleUtility.PromptMenuChoice(0, 0))
         {
@@ -107,8 +113,8 @@ internal class Player
         for (int i = 0; i < enemyCount; i++)
         {
             if (randomEnemies[i].NowHp > 0)
-            {
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}\n");
+            {   
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
             }
             else
             {
@@ -120,7 +126,7 @@ internal class Player
         }
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/{player.Hp}");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("적의 공격 차례!");
         Console.WriteLine("\n0. 다음\n");

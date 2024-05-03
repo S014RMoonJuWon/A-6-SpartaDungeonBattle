@@ -60,6 +60,7 @@ internal class Enemy
     public static void Attack(int enemyCount, List<Enemy> randomEnemies, Player player)
     {
         int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
+        player.NowHp -= sumAtk;
 
         Console.Clear();
 
@@ -80,7 +81,7 @@ internal class Enemy
 
         Console.WriteLine($"총 {sumAtk} 데미지!\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp - sumAtk}/{player.Hp}");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp - sumAtk}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("0. 다음\n");
 
