@@ -87,11 +87,11 @@ internal class Player
         }
         else
         {
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> Dead");
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> Dead\n");
             randomEnemies[keyInput - 1].Died();
         }
         
-        Console.WriteLine("\n0. 다음\n");
+        Console.WriteLine("0. 다음\n");
         
         switch (ConsoleUtility.PromptMenuChoice(0, 0))
         {
