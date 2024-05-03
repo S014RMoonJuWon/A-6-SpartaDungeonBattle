@@ -117,9 +117,13 @@ public class GameManager
                 Console.WriteLine($"{GetPlayer[3].Job}를(을) 선택했습니다.");
                 break;
         }
-        Console.WriteLine("");
+        Console.WriteLine("\n0. 다음\n");
 
-        Thread.Sleep(2000); // 다빈_콘솔 클리어가 너무 빨라서 설정해둠(수정해도 무관)
+        switch (ConsoleUtility.PromptMenuChoice(0, 0))
+        {
+            case 0:
+                break;
+        }
         MainMenu();
     }
 
@@ -404,7 +408,16 @@ public class GameManager
 
         for (int i = 0; i < enemyCount; i++)
         {
-            Console.WriteLine($"{i+1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
+            if (randomEnemies[i].NowHp > 0)
+            {
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
+            }
+            else 
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
+                Console.ResetColor();
+            }
         }
 
          // 다빈_장비 착용 시 증가되는 Hp 표현 복붙해옴
@@ -424,7 +437,8 @@ public class GameManager
             default:
                 Console.Clear();
                 Player.Attack(enemyCount, randomEnemies, keyInput, player);
-                enemyAttack(enemyCount, randomEnemies);
+                Enemy.Attack(enemyCount, randomEnemies, player);
+                BattleMenu(enemyCount, randomEnemies);
                 break;
         }
     }
@@ -522,38 +536,6 @@ public class GameManager
     //        }
     //    }
     //}
-
-
-    void enemyAttack(int enemyCount, List<Enemy> randomEnemies)
-    {
-        Console.Clear();
-
-        ConsoleUtility.ShowTitle("■ Battle!! ■");
-        Console.WriteLine("");
-
-        for (int i = 0; i < enemyCount; i++)
-        {
-            if (randomEnemies[i].NowHp > 0)
-            {
-                Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} 의 공격!\n{player.Name} 을(를) 맞췄습니다. [데미지 : {randomEnemies[i].Atk}]");
-            }
-            else
-            {
-
-            }
-        }
-
-        int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
-
-        Console.WriteLine("\n");
-        Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp - sumAtk}/100");
-        Console.WriteLine("");
-        Console.WriteLine("0. 다음\n");
-        BattleMenu(enemyCount, randomEnemies);
-    }
-
-
 }
 
 public class Program

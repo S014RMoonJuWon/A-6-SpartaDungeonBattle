@@ -106,7 +106,7 @@ internal class Player
         {
             if (randomEnemies[i].NowHp > 0)
             {
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}\n");
             }
             else
             {
@@ -118,10 +118,16 @@ internal class Player
         }
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("적의 공격 차례!");
-        Thread.Sleep(3000);
+        Console.WriteLine("\n0. 다음\n");
+
+        switch (ConsoleUtility.PromptMenuChoice(0, 0))
+        {
+            case 0:
+                break;
+        }
     }
 }
 
