@@ -12,6 +12,7 @@ public class GameManager
 
     private List<Player> GetPlayer; // 다빈_직업 선택 및 추가 작업
 
+    private List<Enemy> randomEnemy;
 
     public GameManager()
     {
@@ -356,32 +357,33 @@ public class GameManager
     // 2차 : 재원님 자료 진행 후 확인 필요사항 주석남김
     // 3차 : 유창님 자료 진행 후 확인 필요사항 주석남김
     {
-        List<Enemy> randomEnemies = new List<Enemy>();
-        Random random = new Random();
-        int enemyCount = random.Next(1, 5);
+        if (randomEnemy == null)
+        {
+            randomEnemy = Enemy.GenerateRandomEnemies(enemy);
+        }
 
         Console.Clear();
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
         // 1~4 마리의 몬스터가 랜덤하게 등장, 표시되는 순서는 랜덤
-
-        for (int i = 0; i < enemyCount; i++) // 이전에 enemy.count였음_주원님이 수정 작성함
+        for (int i = 0; i < randomEnemy.Count; i++)
         {
-            int randomEncount = random.Next(enemy.Count);
-            Enemy randomEnemy = enemy[randomEncount];
-            randomEnemies.Add(randomEnemy.Clone());
+            Enemy enemy = randomEnemy[i];
+            if (randomEnemy[i].NowHp > 0)
+            {
+                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp {enemy.NowHp}\n");
+            }
+            if (randomEnemy[i].NowHp < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp Dead\n");
+                Console.ResetColor();
+            }
         }
-
         // 다빈_장비 착용 시 증가되는 Hp 표현 복붙해옴
         int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
 
-        for (int i = 0; i < enemyCount; i++) 
-        {
-            Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
-        }
-
-        Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
         // 다빈_장비착용 시 보너스 AP 표기되는 것 추가함
@@ -395,20 +397,20 @@ public class GameManager
         {
             // 1. 전투
             case 1:
-                BattleMenu(enemyCount, randomEnemies);
+                BattleMenu(randomEnemy);
                 break;
         }
         // Attck, Skill 함수는 enemyCount 수 까지 누를 수 있게
     }
     // 클론된 randomEnemies 중 공격 대상을 고르는 메뉴
-    void BattleMenu(int enemyCount, List<Enemy> randomEnemies)
+    void BattleMenu(List<Enemy> randomEnemies)
     {
         Console.Clear();
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
         Console.WriteLine("");
 
-        for (int i = 0; i < enemyCount; i++)
+        for (int i = 0; i < randomEnemies.Count; i++)
         {
             if (randomEnemies[i].NowHp > 0)
             {
@@ -432,16 +434,15 @@ public class GameManager
         Console.WriteLine("");
         Console.WriteLine("공격할 대상을 고르세요.");
 
-        int keyInput = ConsoleUtility.PromptMenuChoice(1, enemyCount);
+        int keyInput = ConsoleUtility.PromptMenuChoice(1, randomEnemies.Count);
 
         switch (keyInput)
-        {
+        {   
             default:
                 Console.Clear();
-                Player.Attack(enemyCount, randomEnemies, keyInput, player);
-                Enemy.Attack(enemyCount, randomEnemies, player);
-                Player.Attack(enemyCount, randomEnemies, keyInput, player);
-
+                Player.Attack(randomEnemies.Count, randomEnemies, keyInput, player);
+                Enemy.Attack(randomEnemies.Count, randomEnemies, player);
+                BattleStartMenu();
                 break;
         }
     }

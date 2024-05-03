@@ -40,9 +40,28 @@ internal class Enemy
         var clone = new Enemy(Name, Level, Hp, NowHp , Atk, Exp);
         return clone;
     }
+    
+    public static List<Enemy> GenerateRandomEnemies(List<Enemy> enemyList)
+    {
+        List<Enemy> enemies = new List<Enemy>();
+        Random random = new Random();
+        int enemyCount = random.Next(1, 5);
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            int randomEncount = random.Next(enemyList.Count);
+            Enemy randomEnemy = enemyList[randomEncount].Clone(); // 복제된 적 추가
+            enemies.Add(randomEnemy);
+        }
+
+        return enemies;
+    }
 
     public static void Attack(int enemyCount, List<Enemy> randomEnemies, Player player)
     {
+        int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
+        player.NowHp -= sumAtk;
+
         Console.Clear();
 
         ConsoleUtility.ShowTitle("■ Battle!! ■");
@@ -59,14 +78,14 @@ internal class Enemy
                 Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name}은(는) 죽어있습니다!\n");
             }
         }
-        int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
-        player.NowHp -= sumAtk;
 
-        Console.WriteLine("\n");
+        Console.WriteLine($"총 {sumAtk} 데미지!\n");
+
         Console.WriteLine("[내정보]");
         Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp - sumAtk}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("0. 다음\n");
+
         switch (ConsoleUtility.PromptMenuChoice(0, 0))
         {
             case 0:
