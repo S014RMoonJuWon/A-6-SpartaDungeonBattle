@@ -88,6 +88,7 @@ internal class Player
         else
         {
             Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> Dead");
+            randomEnemies[keyInput - 1].Died();
         }
         
         Console.WriteLine("\n0. 다음\n");
