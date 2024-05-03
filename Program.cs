@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 
 public class GameManager
 {
@@ -117,9 +119,14 @@ public class GameManager
                 Console.WriteLine($"{GetPlayer[3].Job}를(을) 선택했습니다.");
                 break;
         }
-        Console.WriteLine("");
 
-        Thread.Sleep(2000); // 다빈_콘솔 클리어가 너무 빨라서 설정해둠(수정해도 무관)
+        Console.WriteLine("\n0. 다음\n");
+
+        switch (ConsoleUtility.PromptMenuChoice(0, 0))
+        {
+            case 0:
+                break;
+        }
         MainMenu();
     }
 
@@ -404,7 +411,16 @@ public class GameManager
 
         for (int i = 0; i < enemyCount; i++)
         {
-            Console.WriteLine($"{i+1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
+            if (randomEnemies[i].NowHp > 0)
+            {
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
+            }
+            else 
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
+                Console.ResetColor();
+            }
         }
 
          // 다빈_장비 착용 시 증가되는 Hp 표현 복붙해옴
@@ -424,10 +440,73 @@ public class GameManager
             default:
                 Console.Clear();
                 Player.Attack(enemyCount, randomEnemies, keyInput, player);
-                enemyAttack(enemyCount, randomEnemies);
+                Battle(enemyCount, randomEnemies); //"재원" 호출 기능 하나 추가
                 break;
         }
     }
+
+    private void Battle(int enemyCount, List<Enemy> randomEnemies) // "재원" 결과출력 화면 코드 넣음
+    {
+        Console.Clear();
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
+        // 플레이어의 총 체력과 남은 체력을 계산합니다.
+        int totalPlayerHp = player.Hp;
+        int remainingPlayerHp = totalPlayerHp;
+
+        // 인벤토리에 있는 장비의 체력을 추가합니다.
+        foreach (var item in inventory)
+        {
+            if (item.IsEquipped)
+            {
+                totalPlayerHp += item.Hp;
+            }
+        }
+
+        // 플레이어의 현재 체력을 적용합니다.
+        remainingPlayerHp = player.Hp > 0 ? player.Hp : 0;
+
+        // 남은 체력이 플레이어의 최대 체력을 초과하지 않도록 합니다.
+        remainingPlayerHp = remainingPlayerHp > totalPlayerHp ? totalPlayerHp : remainingPlayerHp;
+
+
+        // 몬스터가 죽은 경우
+        if (randomEnemies.All(e => e.NowHp <= 0))
+        {
+            Console.WriteLine("전투에서 승리하였습니다!");
+            Console.WriteLine("");
+            Console.WriteLine($"던전에서 몬스터 {enemyCount}마리를 잡았습니다.");
+            // 플레이어의 체력을 표시합니다.
+            Console.WriteLine("[플레이어 정보]");
+            Console.WriteLine($"Lv.{player.Level.ToString("00")} {player.Name} {player.Job}\nHP {remainingPlayerHp}/{totalPlayerHp}");
+            Console.WriteLine("");
+            Console.WriteLine("0. 다음");
+            // 사용자 입력을 기다립니다.
+            Console.ReadKey();
+            MainMenu();
+            return;
+        }
+        // 플레이어가 죽은 경우
+        else if (player.Hp <= 0)
+        {
+            Console.WriteLine("전투에서 패배하였습니다...");
+            Console.WriteLine("게임오버");
+            // 플레이어의 체력을 표시합니다.
+            Console.WriteLine("[플레이어 정보]");
+            Console.WriteLine($"Lv.{player.Level.ToString("00")} {player.Name} {player.Job}\nHP 0/{totalPlayerHp}");
+            Console.ReadKey();
+            Environment.Exit(0);
+            return;
+
+        }
+        else
+        {
+            Console.Clear(); // 전투가 계속되는 경우에도 화면을 지워줍니다.
+            // 전투가 계속되는 경우 BattleMenu를 호출하여 다음 공격을 진행합니다.
+            BattleMenu(enemyCount, randomEnemies);
+        }
+    }
+
 
     // 데미지 만큼 체력 감소
     // randomEnemy가 죽었을 때 IsDead true, dead 문자열 활성화, enemy 글자색 변경
@@ -533,26 +612,25 @@ public class GameManager
 
         for (int i = 0; i < enemyCount; i++)
         {
-            if (randomEnemies[i].NowHp > 0)
+            if (randomEnemies[i].Hp > 0)
             {
-                Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} 의 공격!\n{player.Name} 을(를) 맞췄습니다. [데미지 : {randomEnemies[i].Atk}]");
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
             }
             else
             {
-
+                randomEnemies[i].Died();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
+                Console.ResetColor();
             }
         }
 
-        int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
-
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp - sumAtk}/100");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
         Console.WriteLine("");
-        Console.WriteLine("0. 다음\n");
-        BattleMenu(enemyCount, randomEnemies);
+        Console.WriteLine("공격할 대상을 고르세요.");
     }
-
 
 }
 
