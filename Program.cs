@@ -368,12 +368,20 @@ public class GameManager
         for (int i = 0; i < randomEnemy.Count; i++)
         {
             Enemy enemy = randomEnemy[i];
-            Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp {enemy.NowHp}");
+            if (randomEnemy[i].NowHp > 0)
+            {
+                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp {enemy.NowHp}\n");
+            }
+            if (randomEnemy[i].NowHp < 0)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp Dead\n");
+                Console.ResetColor();
+            }
         }
         // 다빈_장비 착용 시 증가되는 Hp 표현 복붙해옴
         int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
 
-        Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
         // 다빈_장비착용 시 보너스 AP 표기되는 것 추가함

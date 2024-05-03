@@ -33,7 +33,6 @@ internal class Enemy
     internal void Died()
     {
         IsDead = true;
-        NowHp = 0;
     }
 
     public Enemy Clone()
