@@ -376,6 +376,7 @@ public class GameManager
             }
             if (randomEnemy[i].NowHp < 0)
             {
+                randomEnemy[i].Died();
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp Dead\n");
                 Console.ResetColor();
@@ -505,7 +506,7 @@ public class GameManager
         {
             Console.Clear(); // 전투가 계속되는 경우에도 화면을 지워줍니다.
             // 전투가 계속되는 경우 BattleMenu를 호출하여 다음 공격을 진행합니다.
-            BattleMenu(enemyCount, randomEnemies);
+            BattleMenu(randomEnemy);
         }
     }
 
