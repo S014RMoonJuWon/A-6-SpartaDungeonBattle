@@ -100,6 +100,8 @@ internal class Player
         }
 
         Console.Clear();
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
 
         // 공격 후 콘솔 창
         for (int i = 0; i < enemyCount; i++)
@@ -112,7 +114,7 @@ internal class Player
             {
                 randomEnemies[i].Died();
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead\n");
                 Console.ResetColor();
             }
         }

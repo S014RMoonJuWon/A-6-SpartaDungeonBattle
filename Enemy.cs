@@ -56,7 +56,7 @@ internal class Enemy
             }
             else
             {
-
+                Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name}은(는) 죽어있습니다!\n");
             }
         }
 

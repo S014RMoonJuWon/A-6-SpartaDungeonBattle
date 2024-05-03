@@ -376,7 +376,7 @@ public class GameManager
 
         for (int i = 0; i < enemyCount; i++) 
         {
-            Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
+            Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
         }
 
         Console.WriteLine("");
@@ -438,7 +438,7 @@ public class GameManager
                 Console.Clear();
                 Player.Attack(enemyCount, randomEnemies, keyInput, player);
                 Enemy.Attack(enemyCount, randomEnemies, player);
-                BattleMenu(enemyCount, randomEnemies);
+                BattleStartMenu();
                 break;
         }
     }
