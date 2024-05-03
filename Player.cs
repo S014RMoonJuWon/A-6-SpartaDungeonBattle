@@ -10,9 +10,11 @@ internal class Player
     public int Exp { get; set; } // 재원님 추가 설정
 
     public int Hp { get; set; } // 유창님 set 설정
+    public int NowHp { get; set; } // 다빈 설정
+
     public int Gold { get; set; }
 
-    public Player(string name, string job, int level, float atk, int def, int hp, int gold)
+    public Player(string name, string job, int level, float atk, int def, int hp, int nowHp, int gold)
     {
         Name = name;
         Job = job;
@@ -20,6 +22,7 @@ internal class Player
         Atk = atk;
         Def = def;
         Hp = hp;
+        NowHp = nowHp;
         Gold = gold;
     }
 
@@ -123,7 +126,7 @@ internal class Player
         }
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/{player.Hp}");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("적의 공격 차례!");
         Console.WriteLine("\n0. 다음\n");

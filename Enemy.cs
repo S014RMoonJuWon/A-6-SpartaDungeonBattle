@@ -59,12 +59,12 @@ internal class Enemy
                 Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name}은(는) 죽어있습니다!\n");
             }
         }
-
         int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
+        player.NowHp -= sumAtk;
 
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp - sumAtk}/{player.Hp}");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp - sumAtk}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("0. 다음\n");
         switch (ConsoleUtility.PromptMenuChoice(0, 0))

@@ -33,10 +33,10 @@ public class GameManager
 
         GetPlayer = new List<Player>();
         // 다빈_'name'에 할당될 부분은 작성해도 무관함(어차피 이름 입력받으면 값이 달라짐)
-        GetPlayer.Add(new Player("", "전사", 1, 10, 5, 100, 15000));
-        GetPlayer.Add(new Player("", "마법사", 1, 12, 3, 50, 20000));
-        GetPlayer.Add(new Player("", "궁수", 1, 7, 8, 80, 17000));
-        GetPlayer.Add(new Player("", "도적", 1, 9, 6, 80, 16000));
+        GetPlayer.Add(new Player("", "전사", 1, 10, 5, 100, 100,15000));
+        GetPlayer.Add(new Player("", "마법사", 1, 12, 3, 50, 50, 20000));
+        GetPlayer.Add(new Player("", "궁수", 1, 7, 8, 80, 80, 17000));
+        GetPlayer.Add(new Player("", "도적", 1, 9, 6, 80, 80, 16000));
 
         // 적 초기화
         enemy = new List<Enemy>();
@@ -440,7 +440,8 @@ public class GameManager
                 Console.Clear();
                 Player.Attack(enemyCount, randomEnemies, keyInput, player);
                 Enemy.Attack(enemyCount, randomEnemies, player);
-                BattleStartMenu();
+                Player.Attack(enemyCount, randomEnemies, keyInput, player);
+
                 break;
         }
     }
