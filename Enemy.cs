@@ -1,5 +1,6 @@
 
 ﻿using System;
+using System.Numerics;
 
 internal class Enemy
 {
@@ -31,14 +32,45 @@ internal class Enemy
 
     internal void Died()
     {
-        string alive = $"Hp {Hp}";
         IsDead = true;
-        alive.Replace($"Hp {Hp}", "Dead");
     }
 
     public Enemy Clone()
     {
         var clone = new Enemy(Name, Level, Hp, NowHp , Atk, Exp);
         return clone;
+    }
+
+    public static void Attack(int enemyCount, List<Enemy> randomEnemies, Player player)
+    {
+        Console.Clear();
+
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            if (randomEnemies[i].NowHp > 0)
+            {
+                Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} 의 공격!\n{player.Name} 을(를) 맞췄습니다. [데미지 : {randomEnemies[i].Atk}]\n");
+            }
+            else
+            {
+                Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name}은(는) 죽어있습니다!\n");
+            }
+        }
+
+        int sumAtk = randomEnemies.Sum(randomEnemies => randomEnemies.IsDead ? 0 : randomEnemies.Atk);
+
+        Console.WriteLine("\n");
+        Console.WriteLine("[내정보]");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp - sumAtk}/{player.Hp}");
+        Console.WriteLine("");
+        Console.WriteLine("0. 다음\n");
+        switch (ConsoleUtility.PromptMenuChoice(0, 0))
+        {
+            case 0:
+                break;
+        }
     }
 }

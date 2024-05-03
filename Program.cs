@@ -119,7 +119,6 @@ public class GameManager
                 Console.WriteLine($"{GetPlayer[3].Job}를(을) 선택했습니다.");
                 break;
         }
-
         Console.WriteLine("\n0. 다음\n");
 
         switch (ConsoleUtility.PromptMenuChoice(0, 0))
@@ -379,7 +378,7 @@ public class GameManager
 
         for (int i = 0; i < enemyCount; i++) 
         {
-            Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
+            Console.WriteLine($"Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].NowHp}");
         }
 
         Console.WriteLine("");
@@ -440,7 +439,8 @@ public class GameManager
             default:
                 Console.Clear();
                 Player.Attack(enemyCount, randomEnemies, keyInput, player);
-                Battle(enemyCount, randomEnemies); //"재원" 호출 기능 하나 추가
+                Enemy.Attack(enemyCount, randomEnemies, player);
+                BattleStartMenu();
                 break;
         }
     }
@@ -601,37 +601,6 @@ public class GameManager
     //        }
     //    }
     //}
-
-
-    void enemyAttack(int enemyCount, List<Enemy> randomEnemies)
-    {
-        Console.Clear();
-
-        ConsoleUtility.ShowTitle("■ Battle!! ■");
-        Console.WriteLine("");
-
-        for (int i = 0; i < enemyCount; i++)
-        {
-            if (randomEnemies[i].Hp > 0)
-            {
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp {randomEnemies[i].Hp}");
-            }
-            else
-            {
-                randomEnemies[i].Died();
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
-                Console.ResetColor();
-            }
-        }
-
-        Console.WriteLine("\n");
-        Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
-        Console.WriteLine("");
-        Console.WriteLine("공격할 대상을 고르세요.");
-    }
-
 }
 
 public class Program

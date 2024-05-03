@@ -80,6 +80,7 @@ internal class Player
         Console.WriteLine($"{player.Name}의 공격!");
         Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}을(를) 맞췄습니다. [데미지 : {damage}]\n");
 
+
         if (randomEnemies[keyInput - 1].NowHp <= 0)
         { 
             Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> Dead");
@@ -102,6 +103,8 @@ internal class Player
         }
 
         Console.Clear();
+        ConsoleUtility.ShowTitle("■ Battle!! ■");
+        Console.WriteLine("");
 
         // 공격 후 콘솔 창
         for (int i = 0; i < enemyCount; i++)
@@ -114,16 +117,22 @@ internal class Player
             {
                 randomEnemies[i].Died();
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead");
+                Console.WriteLine($"{i + 1} Lv{randomEnemies[i].Level} {randomEnemies[i].Name} Hp Dead\n");
                 Console.ResetColor();
             }
         }
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/100");
+        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.Hp}/{player.Hp}");
         Console.WriteLine("");
         Console.WriteLine("적의 공격 차례!");
-        Thread.Sleep(3000);
+        Console.WriteLine("\n0. 다음\n");
+
+        switch (ConsoleUtility.PromptMenuChoice(0, 0))
+        {
+            case 0:
+                break;
+        }
     }
 }
 
