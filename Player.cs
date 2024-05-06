@@ -90,11 +90,11 @@ internal class Player
         }
         else if(randomEnemies[keyInput - 1].NowHp >0 && randomEnemies[keyInput - 1].NowHp < randomEnemies[keyInput - 1].Hp)
         {
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput - 1].NowHp}");
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> {randomEnemies[keyInput - 1].NowHp}");
         }
         else 
-        {            
-            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].NowHp+damage} -> {randomEnemies[keyInput - 1].NowHp}");
+        {
+            Console.WriteLine($"Lv.{randomEnemies[keyInput - 1].Level} {randomEnemies[keyInput - 1].Name}\nHp {randomEnemies[keyInput - 1].Hp} -> {randomEnemies[keyInput - 1].NowHp}");
         }
 
         Console.WriteLine("\n0. 다음\n");
@@ -126,7 +126,15 @@ internal class Player
         }
         Console.WriteLine("\n");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp}/{player.Hp}");
+        // 다빈 수정 : 플레이어의 체력이 음수일 때 0으로 표기되도록 함
+        if (player.NowHp <= 0)
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp 0/{player.Hp}");
+        }
+        else
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp}/{player.Hp}");
+        }
         Console.WriteLine("");
         Console.WriteLine("적의 공격 차례!");
         Console.WriteLine("\n0. 다음\n");

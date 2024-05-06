@@ -29,7 +29,7 @@ public class GameManager
         storeInventory.Add(new Item("무쇠갑옷", "튼튼한 갑옷", ItemType.ARMOR, 0, 5, 0, 500));
         storeInventory.Add(new Item("낡은 검", "낡은 검", ItemType.WEAPON, 2, 0, 0, 1000));
         storeInventory.Add(new Item("골든 헬름", "희귀한 투구", ItemType.ARMOR, 0, 9, 0, 2000));
-        storeInventory.Add(new Item("공진단", "공진단", ItemType.Mediecine, 0, 0, 10, 3000));
+        storeInventory.Add(new Item("공진단", "체력증진", ItemType.Mediecine, 0, 0, 10, 3000));
 
 
         GetPlayer = new List<Player>();
@@ -102,21 +102,25 @@ public class GameManager
             case 1:
                 player = GetPlayer[0];
                 player.Name = name; // 입력받은 이름 할당
+                Console.WriteLine("");
                 Console.WriteLine($"{GetPlayer[0].Job}를(을) 선택했습니다.");
                 break;
             case 2:
                 player = GetPlayer[1];
                 player.Name = name;
+                Console.WriteLine("");
                 Console.WriteLine($"{GetPlayer[1].Job}를(을) 선택했습니다.");
                 break;
             case 3:
                 player = GetPlayer[2];
                 player.Name = name;
+                Console.WriteLine("");
                 Console.WriteLine($"{GetPlayer[2].Job}를(을) 선택했습니다.");
                 break;
             case 4:
                 player = GetPlayer[3];
                 player.Name = name;
+                Console.WriteLine("");
                 Console.WriteLine($"{GetPlayer[3].Job}를(을) 선택했습니다.");
                 break;
         }
@@ -372,13 +376,13 @@ public class GameManager
             Enemy enemy = randomEnemy[i];
             if (randomEnemy[i].NowHp > 0)
             {
-                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp {enemy.NowHp}\n");
+                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp {enemy.NowHp}");
             }
             if (randomEnemy[i].NowHp < 0)
             {
                 randomEnemy[i].IsDead = true;
                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp Dead\n");
+                Console.WriteLine($"Lv{enemy.Level} {enemy.Name} Hp Dead");
                 Console.ResetColor();
             }
         }
@@ -442,7 +446,15 @@ public class GameManager
         Console.WriteLine("");
         Console.WriteLine("");
         Console.WriteLine("[내정보]");
-        Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp + bonusHp}/{player.Hp + bonusHp}");
+        // 다빈 수정 : 플레이어의 체력이 음수가 될 때 0으로 표기될 수 있도록 설정
+        if (player.NowHp + bonusHp <= 0)
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp 0/{player.Hp + bonusHp}");
+        }
+        else
+        {
+            Console.WriteLine($"Lv.{(player.Level.ToString("00"))} {player.Name} {player.Job}\nHp {player.NowHp + bonusHp}/{player.Hp + bonusHp}");
+        }
         Console.WriteLine("");
         Console.WriteLine("공격할 대상을 고르세요.");
         int keyInput = ConsoleUtility.PromptMenuChoice(1, randomEnemies.Count);
@@ -461,8 +473,13 @@ public class GameManager
     private void Battle(List<Enemy> randomEnemies) // "재원" 결과출력 화면 코드 넣음
     {
         // 플레이어의 총 체력과 남은 체력을 계산합니다.
-        int totalPlayerHp = player.Hp;
-        int remainingPlayerHp = totalPlayerHp;
+
+        // 다빈 추가
+        int bonusHp = inventory.Select(item => item.IsEquipped ? item.Hp : 0).Sum();
+
+        int totalPlayerHp = player.Hp + bonusHp;
+        // 다빈 수정 : 총 체력과 남은 체력 표기 시 아래 내용 없어도 표기가 가능
+        // int remainingPlayerHp = totalPlayerHp;
         if (randomEnemies.All(e => e.NowHp <= 0))
         {
             Console.Clear();
@@ -474,7 +491,9 @@ public class GameManager
             Console.WriteLine($"던전에서 몬스터 {randomEnemy.Count}마리를 잡았습니다.");
             // 플레이어의 체력을 표시합니다.
             Console.WriteLine("[플레이어 정보]");
-            Console.WriteLine($"Lv.{player.Level.ToString("00")} {player.Name} {player.Job}\nHP {remainingPlayerHp}/{totalPlayerHp}");
+            // Console.WriteLine($"Lv.{player.Level.ToString("00")} {player.Name} {player.Job}\nHP {remainingPlayerHp}/{totalPlayerHp}");
+            // 다빈 수정 : 위의 내용 아래와 같이 수정함
+            Console.WriteLine($"Lv.{player.Level.ToString("00")} {player.Name} {player.Job}\nHP {player.NowHp}/{totalPlayerHp}");
             Console.WriteLine("");
             Console.WriteLine("0. 다음");
             // 사용자 입력을 기다립니다.
