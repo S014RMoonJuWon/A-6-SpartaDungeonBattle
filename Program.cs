@@ -1,7 +1,5 @@
 using System;
 using System.Reflection;
-
-
 public class GameManager
 {
     private Player player;
@@ -129,9 +127,13 @@ public class GameManager
                 break;
         }
 
-        Console.WriteLine("");
+        Console.WriteLine("\n0. 다음\n");
 
-        Thread.Sleep(2000); // 다빈_콘솔 클리어가 너무 빨라서 설정해둠(수정해도 무관)
+        switch (ConsoleUtility.PromptMenuChoice(0, 0))
+        {
+            case 0:
+                break;
+        }
         MainMenu();
     }
 
@@ -610,6 +612,7 @@ public class GameManager
     //        }
     //    }
     //}
+
     void enemyAttack(int enemyCount, List<Enemy> randomEnemies)
     {
         Console.Clear();
@@ -639,7 +642,6 @@ public class GameManager
         Console.WriteLine("0. 다음\n");
         BattleMenu(enemyCount, randomEnemies);
     }
-
 }
 
 public class Program
