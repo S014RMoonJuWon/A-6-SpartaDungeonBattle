@@ -402,17 +402,15 @@ public class GameManager
 
         }
         Console.WriteLine("");
-        Console.WriteLine("1. 공격\n2. 스킬\n3. 아이템\n4. 전투결과");
+        Console.WriteLine("1. 공격\n2. 스킬\n3. 아이템\n");
         Console.WriteLine("");
-        int KeyInput = ConsoleUtility.PromptMenuChoice(1, 4);
+        Battle(randomEnemy);
+        int KeyInput = ConsoleUtility.PromptMenuChoice(1, 3);
         switch (KeyInput)
         {
             // 1. 전투
             case 1:
                 BattleMenu(randomEnemy);
-                break;
-            case 4:
-                Battle(randomEnemy);
                 break;
         }
         // Attck, Skill 함수는 enemyCount 수 까지 누를 수 있게
@@ -517,9 +515,7 @@ public class GameManager
         }
         else
         {
-            Console.Clear(); // 전투가 계속되는 경우에도 화면을 지워줍니다.
-            // 전투가 계속되는 경우 BattleMenu를 호출하여 다음 공격을 진행합니다.
-            BattleStartMenu();
+
         }
     }
 
