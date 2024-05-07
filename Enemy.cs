@@ -31,9 +31,7 @@ internal class Enemy
 
     internal void Died()
     {
-        string alive = $"Hp {Hp}";
         IsDead = true;
-        alive.Replace($"Hp {Hp}", "Dead");
     }
 
     public Enemy Clone()
